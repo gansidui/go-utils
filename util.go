@@ -165,3 +165,23 @@ func StringToByteSlice(s *string) []byte {
 	sh.Cap = sh.Len
 	return *(*[]byte)(unsafe.Pointer(sh))
 }
+
+// 反转int slice
+func ReverseIntSlice(in []int) {
+	i, j := 0, len(in)-1
+	for i < j {
+		in[i], in[j] = in[j], in[i]
+		i++
+		j--
+	}
+}
+
+// 反转string slice
+func ReverseStringSlice(in []string) {
+	i, j := 0, len(in)-1
+	for i < j {
+		in[i], in[j] = in[j], in[i]
+		i++
+		j--
+	}
+}
