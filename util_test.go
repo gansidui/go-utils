@@ -49,6 +49,24 @@ func TestUtils2(t *testing.T) {
 	if !bytes.Equal(StringToByteSlice(&s), []byte(s)) {
 		t.Fatal()
 	}
+
+	// reverse
+	intslice := []int{1, 2, 3}
+	ReverseIntSlice(intslice)
+	if intslice[0] != 3 || intslice[1] != 2 || intslice[2] != 1 {
+		t.Fatal()
+	}
+	intslice = []int{5, 6, 7, 8}
+	ReverseIntSlice(intslice)
+	if intslice[0] != 8 || intslice[1] != 7 || intslice[2] != 6 || intslice[3] != 5 {
+		t.Fatal()
+	}
+	stringslice := []string{"hello", "world", "golang"}
+	ReverseStringSlice(stringslice)
+	if stringslice[0] != "golang" || stringslice[1] != "world" || stringslice[2] != "hello" {
+		t.Fatal()
+	}
+
 }
 
 func testAES(text, key []byte, t *testing.T) {
