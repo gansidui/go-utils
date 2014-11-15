@@ -69,3 +69,34 @@ func (this *RingBuffer) Capacity() int {
 func (this *RingBuffer) FreeSize() int {
 	return this.Capacity() - this.Size()
 }
+
+// 重置RingBuffer
+func (this *RingBuffer) Reset() {
+	this.pr, this.pw = 0, 0
+}
+
+// 删除最新的n个byte，若Size不足n，则重置RingBuffer
+func (this *RingBuffer) RemoveNewest(n int) {
+	if this.Size() <= n {
+		this.Reset()
+		return
+	}
+	if this.pr < this.pw || n <= this.pw {
+		this.pw -= n
+	} else {
+		this.pw = len(this.buf) - n + this.pw
+	}
+}
+
+// 删除最旧的n个byte，若Size不足n，则重置RingBuffer
+func (this *RingBuffer) RemoveOldest(n int) {
+	if this.Size() <= n {
+		this.Reset()
+		return
+	}
+	if this.pr < this.pw || n <= len(this.buf)-this.pr {
+		this.pr += n
+	} else {
+		this.pr = n - len(this.buf) + this.pr
+	}
+}
