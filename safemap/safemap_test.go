@@ -20,15 +20,15 @@ func TestSafeMap(t *testing.T) {
 	mp.Set("golang", 100)
 	mp.Set("google", 3.14)
 
-	if val := mp.Get("hello"); val.(string) != "world" {
+	if val, ok := mp.Get("hello"); !ok || val.(string) != "world" {
 		t.Fatal()
 	}
 
-	if val := mp.Get("golang"); val.(int) != 100 {
+	if val, ok := mp.Get("golang"); !ok || val.(int) != 100 {
 		t.Fatal()
 	}
 
-	if val := mp.Get("lijie"); val != nil {
+	if val, ok := mp.Get("lijie"); ok || val != nil {
 		t.Fatal()
 	}
 

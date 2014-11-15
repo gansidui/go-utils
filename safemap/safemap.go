@@ -1,7 +1,6 @@
 //
 // The thread safe of map
 //
-
 package safemap
 
 import (
@@ -22,13 +21,11 @@ func New() *SafeMap {
 }
 
 // Return the key's value
-func (this *SafeMap) Get(key interface{}) interface{} {
+func (this *SafeMap) Get(key interface{}) (interface{}, bool) {
 	this.lock.RLock()
 	defer this.lock.RUnlock()
-	if value, ok := this.mp[key]; ok {
-		return value
-	}
-	return nil
+	value, ok := this.mp[key]
+	return value, ok
 }
 
 // Set (key --> value)
