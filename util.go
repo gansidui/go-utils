@@ -6,7 +6,11 @@ import (
 	"crypto/cipher"
 	"crypto/md5"
 	crand "crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
 	"encoding/hex"
+	"encoding/pem"
+	"errors"
 	"hash"
 	"io"
 	mrand "math/rand"
@@ -110,6 +114,37 @@ func AesDecrypt(ciphertext, key []byte) ([]byte, error) {
 	ciphertext = ciphertext[:len(ciphertext)-unpadding]
 
 	return ciphertext, nil
+}
+
+// RSA加密，传入plaintext和publickey，返回ciphertext（plaintext不改变）
+func RsaEncrypt(plaintext, publickey []byte) ([]byte, error) {
+	block, _ := pem.Decode(publickey)
+	if block == nil {
+		return nil, errors.New("public key error")
+	}
+
+	pubInterface, err := x509.ParsePKIXPublicKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	pub := pubInterface.(*rsa.PublicKey)
+
+	return rsa.EncryptPKCS1v15(crand.Reader, pub, plaintext)
+}
+
+// RSA解密，传入ciphertext和privatekey，返回plaintext（ciphertext不改变）
+func RsaDecrypt(ciphertext, privatekey []byte) ([]byte, error) {
+	block, _ := pem.Decode(privatekey)
+	if block == nil {
+		return nil, errors.New("private key error")
+	}
+
+	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsa.DecryptPKCS1v15(crand.Reader, priv, ciphertext)
 }
 
 // 得到一个长度在区间[m, n]内的随机字符串，字母为小写[a, z]
