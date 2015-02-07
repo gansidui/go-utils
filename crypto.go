@@ -56,6 +56,10 @@ func AesDecrypt(ciphertext, key []byte) ([]byte, error) {
 	mode.CryptBlocks(plaintext, ciphertext)
 
 	unpadding := int(plaintext[len(plaintext)-1])
+	if unpadding <= 0 || unpadding > 16 {
+		return nil, errors.New("AesDecrypt error: unpadding <= 0 || unpadding > 16")
+	}
+
 	plaintext = plaintext[:len(plaintext)-unpadding]
 
 	return plaintext, nil
