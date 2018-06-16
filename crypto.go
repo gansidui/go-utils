@@ -47,6 +47,9 @@ func AesDecrypt(ciphertext, key []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+	if len(ciphertext) <= aes.BlockSize || len(ciphertext)%aes.BlockSize != 0 {
+		return nil, errors.New("AesDecrypt error: len(ciphertext) % aes.BlockSize != 0")
+	}
 
 	iv := ciphertext[:aes.BlockSize]
 	ciphertext = ciphertext[aes.BlockSize:]
