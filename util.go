@@ -60,6 +60,7 @@ func readFile(filename string, h hash.Hash) error {
 func RandomString(m, n int) string {
 	num := 0
 	if m < n {
+		rand.Seed(time.Now().UnixNano())
 		num = rand.Intn(n-m) + m
 	} else {
 		num = m
@@ -68,7 +69,8 @@ func RandomString(m, n int) string {
 	bytes := make([]byte, num)
 	const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
-	for i, _ := range bytes {
+	for i := range bytes {
+		rand.Seed(time.Now().UnixNano())
 		bytes[i] = alphabet[rand.Intn(26)]
 	}
 
